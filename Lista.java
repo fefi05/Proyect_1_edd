@@ -6,117 +6,139 @@ package EDD;
 
 /**
  *
- * @author joses
+ * @author G. Angelo, S. Estefania y S. Jose
  */
 //CREACIÓN DE CLASE LISTA
 public class Lista<T> {
 
     //Definicion de atributos de la clase lista
-    private Nodo<T> pFirst;
-    private Nodo<T> pLast;
+    private Nodo<T> pPrim;
     private int iN;
 
     //Constructor
     public Lista() {
         this.iN = 0;
-        this.pFirst = null;
-        this.pLast = null;
+        this.pPrim = null;
     }
 
-    //Destruir lista
-    public void destruirLista() {
-        while (pFirst != null) {
-            Nodo<T> pTemp = pLast;
-            pLast = pLast.pPrev;
-            if (pLast != null) {
-                pLast.pNext = null;
-            }
-            pTemp.pPrev = null;
-            pTemp = null;
-        }
-    }
-
+    //Metodos de la clase Lista
     //Lista esta vacia
     public boolean esVacio() {
-        return pFirst == null;
+        return getpPrim() == null;
     }
 
     //Primer nodo de la lista
     public Nodo<T> primero() {
-        return pFirst;
-    }
-
-    //Ultimo nodo de la lista
-    public Nodo<T> ultimo() {
-        return pLast;
+        return getpPrim();
     }
 
     //Busca el proximo nodo
     public void proximo(Nodo<T> pValor) {
-        if (pValor != null && pValor.pNext != null) {
-            pValor = pValor.pNext;
-        }
-    }
-
-    //Busca el nodo anterior
-    public void anterior(Nodo<T> pValor) {
-        if (pValor != null && pValor.pPrev != null) {
-            pValor = pValor.pPrev;
+        if (pValor != null && pValor.getpSig() != null) {
+            pValor = pValor.getpSig();
         }
     }
 
     //Accede a la informacion del nodo
     public T acceder(Nodo<T> pValor) {
         if (pValor != null) {
-            return pValor.tInfo;
+            return pValor.gettInfo();
         }
         return null;
     }
 
     //Inserta un nodo en la lista
-    public void insertar(T valor, boolean alInicio) {
-        Nodo<T> nodo = new Nodo<>(valor);
-        if (pFirst == null) {
-            pFirst = nodo;
-            pLast = nodo;
+    public void insertar(T elem) {
+        Nodo<T> nuevoNodo = new Nodo<>(elem);
+        if (this.esVacio() == true) {
+            this.setpPrim(nuevoNodo);
         } else {
-            if (alInicio) {
-                // Si es alInicio es true, entonces preInsertar.
-                nodo.pNext = pFirst;
-                pFirst.pPrev = nodo;
-                pFirst = nodo;
-            } else {
-                // Si es alInicio es false, entonces postInsertar.
-                nodo.pPrev = pLast;
-                pLast.pNext = nodo;
-                pLast = nodo;
+            Nodo<T> pAux = this.getpPrim();
+            while (pAux.getpSig() != null) {
+                pAux = pAux.getpSig();
             }
+            pAux.setpSig(nuevoNodo);
         }
-        iN++;
+        this.setiN(this.getiN() + 1);
     }
 
-    public void eliminar(Nodo<T> pValor) {
-        if (pValor != null) {
-            if (pValor.pPrev != null) {
-                pValor.pPrev.pNext = pValor.pNext;
-            } else {
-                pFirst = pValor.pNext;
-            }
-
-            if (pValor.pNext != null) {
-                pValor.pNext.pPrev = pValor.pPrev;
-            } else {
-                pLast = pValor.pPrev;
-            }
-
-            pValor.pNext = null;
-            pValor.pPrev = null;
-            pValor = null;
-            iN--;
+    // Eliminar un nodo de la lista
+    public void eliminar(T elem) {
+        if (this.esVacio() == true) {
+            // Imprimir un mensaje y salir del método
+            System.out.println("La lista está vacía");
+            return;
         }
+
+        // Si el elemento a eliminar está en el primer nodo
+        if (this.getpPrim().gettInfo().equals(elem)) {
+            this.setpPrim(this.getpPrim().getpSig());
+            this.setiN(this.getiN() - 1);
+            return;
+        }
+
+        Nodo<T> actual = this.getpPrim();
+        Nodo<T> anterior = null;
+
+        while (actual != null && !actual.gettInfo().equals(elem)) {
+            anterior = actual;
+            actual = actual.getpSig();
+        }
+
+        if (actual == null) {
+            // Opción 1: Imprimir un mensaje y salir del método
+            System.out.println("El elemento no está en la lista");
+            return;
+        }
+
+        anterior.setpSig(actual.getpSig());
+        this.setiN(this.getiN() - 1);
     }
 
+    //Tamano de la lista
     public int tamano() {
+        return getiN();
+    }
+
+    //Busqueda en la lista
+    public boolean busqueda(T elem) {
+        Nodo<T> actual = this.pPrim;
+        while (actual != null) {
+            if (actual.gettInfo().equals(elem)) {
+                return true; // Elemento encontrado
+            }
+            actual = actual.getpSig();
+        }
+        return false; // Elemento no encontrado
+    }
+
+    // Gets & Sets
+    /**
+     * @return the pPrim
+     */
+    public Nodo<T> getpPrim() {
+        return pPrim;
+    }
+
+    /**
+     * @param pPrim the pPrim to set
+     */
+    public void setpPrim(Nodo<T> pPrim) {
+        this.pPrim = pPrim;
+    }
+
+    /**
+     * @return the iN
+     */
+    public int getiN() {
         return iN;
     }
+
+    /**
+     * @param iN the iN to set
+     */
+    public void setiN(int iN) {
+        this.iN = iN;
+    }
+
 }
