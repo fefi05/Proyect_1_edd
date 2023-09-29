@@ -133,18 +133,22 @@ public class Grafo {
     // Kosaraju
     public void recorrerGrafo(int v, boolean visited[], Pila pila) {
         visited[v] = true;
-        for (int u = 0; u < getNumVertices(); u++) {
-            Nodo aux = getListaAdy()[u].getpPrim();
-            
-            while (aux != null) {                
-                if (!visited[(int) aux.gettInfo()]) {
-                    recorrerGrafo((int) aux.gettInfo(), visited, pila);
-                    aux = aux.getpSig();
+
+        for (int i = 0; i < getNumVertices(); i++) {
+            Nodo aux = getListaAdy()[v].getpPrim(); // Obtenemos el primer vecino de v
+
+            while (aux != null) {
+                int vecino = (int) aux.gettInfo();
+                if (!visited[vecino]) {
+                    recorrerGrafo(vecino, visited, pila);
                 }
+                aux = aux.getpSig(); // Moverse al siguiente vecino en la lista de adyacencia
             }
-        }
-        pila.insertar(v);
-    }
+
+            pila.insertar(v);
+        }
+
+    }
 
     public Grafo transpuesto() {
         Grafo grafoTranspuesto = new Grafo(getNumVertices(), true);
