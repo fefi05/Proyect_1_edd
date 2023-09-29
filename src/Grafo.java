@@ -146,9 +146,8 @@ public class Grafo {
             }
 
             pila.insertar(v);
-        }
-
-    }
+        }
+    }
 
     public Grafo transpuesto() {
         Grafo grafoTranspuesto = new Grafo(getNumVertices(), true);
