@@ -1,11 +1,13 @@
+package EDD;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-
 /**
  *
  * @author G. Angelo, S. Estefania y S. Jose
+ * @param <T>
  */
 //CREACIÓN DE CLASE LISTA
 public class Lista<T> {
@@ -47,51 +49,41 @@ public class Lista<T> {
     }
 
     //Inserta un nodo en la lista
-    public void insertar(T elem) {
-        Nodo<T> nuevoNodo = new Nodo<>(elem);
-        if (this.esVacio() == true) {
-            this.setpPrim(nuevoNodo);
+    public void insertar(T nuevoElemento) {
+        Nodo<T> nuevoNodo = new Nodo<>(nuevoElemento);
+        if (this.esVacio()) {
+            this.pPrim = nuevoNodo;
         } else {
-            Nodo<T> pAux = this.getpPrim();
+            Nodo<T> pAux = this.pPrim;
             while (pAux.getpSig() != null) {
                 pAux = pAux.getpSig();
             }
             pAux.setpSig(nuevoNodo);
         }
-        this.setiN(this.getiN() + 1);
+        this.iN++;
     }
 
     // Eliminar un nodo de la lista
-    public void eliminar(T elem) {
-        if (this.esVacio() == true) {
-            // Imprimir un mensaje y salir del método
-            System.out.println("La lista está vacía");
+    public void eliminar(T elemento) {
+        if (pPrim == null || elemento == null) {
             return;
         }
 
-        // Si el elemento a eliminar está en el primer nodo
-        if (this.getpPrim().gettInfo().equals(elem)) {
-            this.setpPrim(this.getpPrim().getpSig());
-            this.setiN(this.getiN() - 1);
+        if (pPrim.gettInfo().equals(elemento)) {
+            pPrim = pPrim.getpSig();
+            iN--;
             return;
         }
 
-        Nodo<T> actual = this.getpPrim();
-        Nodo<T> anterior = null;
-
-        while (actual != null && !actual.gettInfo().equals(elem)) {
-            anterior = actual;
+        Nodo<T> actual = pPrim;
+        while (actual.getpSig() != null && !actual.getpSig().gettInfo().equals(elemento)) {
             actual = actual.getpSig();
         }
 
-        if (actual == null) {
-            // Opción 1: Imprimir un mensaje y salir del método
-            System.out.println("El elemento no está en la lista");
-            return;
+        if (actual.getpSig() != null) {
+            actual.setpSig(actual.getpSig().getpSig());
+            iN--;
         }
-
-        anterior.setpSig(actual.getpSig());
-        this.setiN(this.getiN() - 1);
     }
 
     //Tamano de la lista
@@ -99,16 +91,16 @@ public class Lista<T> {
         return getiN();
     }
 
-    //Busqueda en la lista
-    public boolean busqueda(T elem) {
+    //Busqueda de un nodo en la lista
+    public Nodo<T> obtenerNodo(Object elem) {
         Nodo<T> actual = this.pPrim;
         while (actual != null) {
             if (actual.gettInfo().equals(elem)) {
-                return true; // Elemento encontrado
+                return actual;
             }
             actual = actual.getpSig();
         }
-        return false; // Elemento no encontrado
+        return null;
     }
 
     // Gets & Sets
